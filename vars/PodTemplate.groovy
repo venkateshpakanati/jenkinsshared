@@ -33,7 +33,7 @@ public class PodTemplate implements Serializable {
               image: images."maven",
               command: 'cat',
               envVars: [
-                script.envVar(key: 'JAVA_TOOL_OPTIONS', value: "-Duser.home=${workingdir}"),
+                //script.envVar(key: 'JAVA_TOOL_OPTIONS', value: "-Duser.home=${workingdir}"),
                 script.envVar(key: 'MAVEN_CONFIG', value: "${workingdir}/.m2")
               ],
               ttyEnabled: true,
@@ -66,7 +66,7 @@ public class PodTemplate implements Serializable {
           containers: this.inputcontainers,
           volumes: [
            // script.secretVolume(secretName: 'maven-settings', mountPath: "${workingdir}/.m2")
-           script.configMapVolume(configMapName: 'settings-xml', mountPath: "${workingdir}/.m2"),
+           script.configMapVolume(configMapName: "settings-xml", mountPath: "${workingdir}/.m2"),
           ]
        ){
             body ()
