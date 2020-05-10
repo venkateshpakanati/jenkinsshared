@@ -46,7 +46,7 @@ public class PodTemplate implements Serializable {
             )
         }
      }
- podTemplate(label: label, containers: [ 
+// podTemplate(label: label, containers: [ 
 //   containerTemplate(name: 'maven', image: 'maven:3.6.0-jdk-8-alpine', command: 'cat', ttyEnabled: true,
 //   envVars: [envVar(key: 'MAVEN_CONFIG', value: '/home/jenkins/.m2')]),
 //   containerTemplate(name: 'docker', image: 'trion/jenkins-docker-client'),
