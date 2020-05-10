@@ -19,6 +19,7 @@ public class PodTemplate implements Serializable {
         this.images = images
 
       if (images.containsKey('maven')) {
+          println "it's maven image >>>>>>>>>>>>>>>>>>>>>>"
           cpuLmt = '500m'
           memLmt = '500Mi'
           if (images.containsKey('mavenCpuLmt')) {
@@ -34,7 +35,7 @@ public class PodTemplate implements Serializable {
               command: 'cat',
               envVars: [
                 //script.envVar(key: 'JAVA_TOOL_OPTIONS', value: "-Duser.home=${workingdir}"),
-                script.envVar(key: 'MAVEN_CONFIG', value: "${workingdir}/.m2")
+                script.envVar(key: 'MAVEN_CONFIG', value: '${workingdir}/.m2')
               ],
               ttyEnabled: true,
               workingDir: workingdir,
@@ -66,7 +67,7 @@ public class PodTemplate implements Serializable {
           containers: this.inputcontainers,
           volumes: [
            // script.secretVolume(secretName: 'maven-settings', mountPath: "${workingdir}/.m2")
-           script.configMapVolume(configMapName: "settings-xml", mountPath: "${workingdir}/.m2"),
+           script.configMapVolume(configMapName: "settings-xml", mountPath: '${workingdir}/.m2'),
           ]
        ){
             body ()
