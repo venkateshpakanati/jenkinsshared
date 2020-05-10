@@ -1,4 +1,4 @@
-public class test implements Serializable {
+public class PodTemplate implements Serializable {
     public String podlabel
     public String workingdir
     public String memLmt
@@ -9,7 +9,7 @@ public class test implements Serializable {
     public Map images
     def inputcontainers = []
 
-    public test(String label,
+    public PodTemplate(String label,
                       Map images,
                       String workingdir,
                       script) {
