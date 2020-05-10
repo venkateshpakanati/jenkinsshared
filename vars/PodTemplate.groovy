@@ -38,7 +38,7 @@ public class PodTemplate implements Serializable {
                 script.envVar(key: 'MAVEN_CONFIG', value: '${workingdir}/.m2')
               ],
               ttyEnabled: true,
-              workingDir: workingdir,
+             // workingDir: workingdir,
               alwaysPullImage: false,
               resourceRequestCpu: '100m',
               resourceLimitCpu: cpuLmt,
@@ -67,7 +67,7 @@ public class PodTemplate implements Serializable {
           containers: this.inputcontainers,
           volumes: [
            // script.secretVolume(secretName: 'maven-settings', mountPath: "${workingdir}/.m2")
-           script.configMapVolume(configMapName: "settings-xml", mountPath: '${workingdir}/.m2'),
+           script.configMapVolume(configMapName: "settings-xml", mountPath: '/home/jenkins/.m2'),
           ]
        ){
             body ()
