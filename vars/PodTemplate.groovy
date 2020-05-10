@@ -19,7 +19,6 @@ public class PodTemplate implements Serializable {
         this.images = images
 
       if (images.containsKey('maven')) {
-          println "it's maven image >>>>>>>>>>>>>>>>>>>>>>"
           cpuLmt = '500m'
           memLmt = '500Mi'
           if (images.containsKey('mavenCpuLmt')) {
@@ -46,6 +45,52 @@ public class PodTemplate implements Serializable {
               resourceLimitMemory: memLmt
             )
         }
+        if (images.containsKey('helm')) {
+          cpuLmt = '500m'
+          memLmt = '500Mi'
+          if (images.containsKey('helmCpuLmt')) {
+            cpuLmt = images."helmCpuLmt"
+          }
+          if (images.containsKey('helmMemLmt')) {
+            memLmt = images."helmMemLmt"
+          }
+          this.inputcontainers << 
+            script.containerTemplate(
+              name: 'helm', 
+              image: images."helm",
+              command: 'cat', 
+              ttyEnabled: true,
+             // workingDir: workingdir,
+              alwaysPullImage: false,
+              resourceRequestCpu: '100m',
+              resourceLimitCpu: cpuLmt,
+              resourceRequestMemory: '500Mi',
+              resourceLimitMemory: memLmt
+            )
+        }
+         if (images.containsKey('docker')) {
+          cpuLmt = '500m'
+          memLmt = '500Mi'
+          if (images.containsKey('dockerCpuLmt')) {
+            cpuLmt = images."dockerCpuLmt"
+          }
+          if (images.containsKey('dockerMemLmt')) {
+            memLmt = images."dockerMemLmt"
+          }
+          this.inputcontainers << 
+            script.containerTemplate(
+              name: 'docker', 
+              image: images."docker",
+              command: 'cat', 
+              ttyEnabled: true,
+             // workingDir: workingdir,
+              alwaysPullImage: false,
+              resourceRequestCpu: '100m',
+              resourceLimitCpu: cpuLmt,
+              resourceRequestMemory: '500Mi',
+              resourceLimitMemory: memLmt
+            )
+        }  
      }
 // podTemplate(label: label, containers: [ 
 //   containerTemplate(name: 'maven', image: 'maven:3.6.0-jdk-8-alpine', command: 'cat', ttyEnabled: true,
@@ -68,6 +113,9 @@ public class PodTemplate implements Serializable {
           volumes: [
            // script.secretVolume(secretName: 'maven-settings', mountPath: "${workingdir}/.m2")
            script.configMapVolume(configMapName: "settings-xml", mountPath: '/home/jenkins/.m2'),
+           script.hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
+           script.secretVolume(secretName: 'helm-repository', mountPath: '/home/groot/helm/repository'),
+           script.emptyDirVolume(mountPath: '/home/groot/helm/repository/cache', memory: false)
           ]
        ){
             body ()
