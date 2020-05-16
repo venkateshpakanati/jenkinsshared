@@ -1,9 +1,9 @@
+
 public class PodTemplate implements Serializable {
     public String podlabel
     public String workingdir
     public String memLmt
     public String cpuLmt
-    public String m2FileSystem
     public String buildWrkspace
     def script
     public Map images
@@ -92,20 +92,6 @@ public class PodTemplate implements Serializable {
             )
         }  
      }
-// podTemplate(label: label, containers: [ 
-//   containerTemplate(name: 'maven', image: 'maven:3.6.0-jdk-8-alpine', command: 'cat', ttyEnabled: true,
-//   envVars: [envVar(key: 'MAVEN_CONFIG', value: '/home/jenkins/.m2')]),
-//   containerTemplate(name: 'docker', image: 'trion/jenkins-docker-client'),
-// //  containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.8.8', command: 'cat', ttyEnabled: true),
-//   containerTemplate(name: 'helm', image: 'venkateshpakanati/helm_push:1.3', command: 'cat', ttyEnabled: true)
-
-//   ],
-//   volumes: [
-//       configMapVolume(configMapName: 'settings-xml', mountPath: '/home/jenkins/.m2'),
-//       hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
-//       secretVolume(secretName: 'helm-repository', mountPath: '/home/groot/helm/repository'),
-//       emptyDirVolume(mountPath: '/home/groot/helm/repository/cache', memory: false)
-//   ]
      public void BuilderTemplate (body) {
       script.podTemplate(
           label: podlabel,
