@@ -1,5 +1,7 @@
 
 public class PodTemplate implements Serializable {
+    public String clustername
+    public String namespace
     public String podlabel
     public String workingdir
     public String memLmt
@@ -9,10 +11,14 @@ public class PodTemplate implements Serializable {
     public Map images
     def inputcontainers = []
 
-    public PodTemplate(String label,
+    public PodTemplate(String clustername,
+                      String namespace,
+                      String label,
                       Map images,
                       String workingdir,
                       script) {
+        this.clustername=clustername
+        this.namespace=namespace 
         this.podlabel=label
         this.workingdir=workingdir
         this.script=script
@@ -90,10 +96,33 @@ public class PodTemplate implements Serializable {
               resourceRequestMemory: '500Mi',
               resourceLimitMemory: memLmt
             )
+        }
+        if (images.containsKey('jnlp')) {
+            cpuLmt = '800m'
+            memLmt = '1500Mi'
+          if (images.containsKey('jnlpCpuLmt')) {
+            cpuLmt = images."jnlpCpuLmt"
+          }
+          if (images.containsKey('jnlpMemLmt')) {
+              memLmt = images."jnlpMemLmt"
+          }
+          this.inputcontainers  << 
+              script.containerTemplate(
+                name: 'jnlp', 
+                image: images."jnlp",                        
+                args: '${computer.jnlpmac} ${computer.name}',
+               // workingDir: workingdir,
+                resourceRequestCpu: '50m',
+                resourceLimitCpu: cpuLmt,
+                resourceRequestMemory: '512Mi',
+                resourceLimitMemory: memLmt
+              )
         }  
      }
      public void BuilderTemplate (body) {
       script.podTemplate(
+          cloud: clustername,
+          namespace: namespace,
           label: podlabel,
           containers: this.inputcontainers,
           volumes: [
